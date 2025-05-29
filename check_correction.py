@@ -2,12 +2,11 @@ import os
 from sklearn.metrics import classification_report, f1_score
 import numpy as np
 
-# === Папка с предсказанными папками
 sorted_dir = 'sorted_output_cut_MIX'
 class_names = ['anger', 'disgust', 'fear', 'happy', 'sadness', 'surprise']
 non_classified_folder = os.path.join(sorted_dir, 'non_classified')
 
-# === Задание ground truth: диапазоны imgX
+
 # ground_truth_ranges = {
 #     'anger': range(1, 4),
 #     'disgust': range(4, 7),
@@ -24,13 +23,12 @@ ground_truth_ranges = {
     'sadness': range(40, 51),
     'surprise': range(50, 60),
 }
-# === Генерация словаря filename → true_class
+
 ground_truth = {}
 for emotion, r in ground_truth_ranges.items():
     for i in r:
         ground_truth[f"im{i}"] = emotion
 
-# === Сбор предсказаний и настоящих меток
 y_true = []
 y_pred = []
 
@@ -60,7 +58,7 @@ if os.path.exists(non_classified_folder):
         if f.lower().endswith(('.jpg', '.png', '.jpeg'))
     ])
 
-# === Отчёт по метрикам
+
 print("\nClassification report:")
 report = classification_report(y_true, y_pred, labels=class_names, output_dict=True)
 for cls in class_names:
@@ -70,9 +68,7 @@ for cls in class_names:
           f"f1-score: {report[cls]['f1-score']:.2f}  "
           f"support: {report[cls]['support']}")
 
-# === Общий F1-score (микро-среднее)
 overall_f1 = f1_score(y_true, y_pred, average='micro')
 print(f"\nOverall F1-score (micro average): {overall_f1:.2f}")
 
-# === Информация по non_classified
 print(f"\nImages in 'non_classified': {non_classified_count}")
